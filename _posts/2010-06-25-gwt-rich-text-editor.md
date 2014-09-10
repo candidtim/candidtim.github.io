@@ -304,8 +304,9 @@ public class TextEditorPreset
     PRESET_BASIC.put("theme", "simple");
 
     PRESET_ADVANCED.put("theme", "advanced");
-    PRESET_ADVANCED.put("plugins", "emotions,spellchecker,advhr,insertdatetime,preview");
-   PRESET_ADVANCED.put("theme_advanced_buttons1", "newdocument, |,
+    PRESET_ADVANCED.put("plugins",
+      "emotions,spellchecker,advhr,insertdatetime,preview");
+    PRESET_ADVANCED.put("theme_advanced_buttons1", "newdocument, |,
       bold, italic, underline, |, justifyleft, justifycenter,
       justifyright, fontselect, fontsizeselect, formatselect");
     PRESET_ADVANCED.put("theme_advanced_buttons2", "cut, copy, paste, |,

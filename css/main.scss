@@ -13,8 +13,8 @@ $base-line-height: 1.5;
 
 $spacing-unit:     30px;
 
-$text-color:       #111;
-$background-color: #fdfdfd;
+$text-color:       #444;
+$background-color: #fff;
 $brand-color:      #2a7ae2;
 
 $grey-color:       #828282;
@@ -24,6 +24,9 @@ $grey-color-dark:  darken($grey-color, 25%);
 $on-palm:          600px;
 $on-laptop:        800px;
 
+
+// Custom colors
+$separator-color: #fdb020;
 
 
 // Using media queries with like this:
