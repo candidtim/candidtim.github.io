@@ -11,12 +11,9 @@ lacked the documentation on this subject. I've found the
 still one broken by the time of this writing) and the only way to proceed was to experiment a lot and dig into
 open-soruce implementations of a couple of other application indicators. So, I've decided to release this guide, 
 hopefully comprehensive enough and useful. Here I show, step-by-step, how the AppIndicator could be implemented in 
-Python.
+Python. I try to keep it short and concrete, yet understandible.
 
-I try to keep it short and concrete, yet understandible. Where a more detailed explanation is needed I will move it to
-a dedicated section in the end of the post.
-
-## Minimal set-up - basic indicator with a sample icon
+## Minimal set-up - the very basic indicator
 
 The very basic AppIndicator in Python would be like this:
 
@@ -36,39 +33,40 @@ if __name__ == "__main__":
     main()
 {% endhighlight %}
 
-First, we import [Gtk+ 3](http://python-gtk-3-tutorial.readthedocs.org/en/latest/#) and 
-[AppIndicator](http://developer.ubuntu.com/api/devel/ubuntu-13.10/python/AppIndicator3-0.1.html) basic implementation. 
-Thing to note here is that in some older documentation you may find importing `gtk` module - that would be an older 
-Gtk 2.
+Few notes on it:
 
-A most simple AppIndicator, in order to be actually displayed, would need to be activated (`set_status(...ACTIVE)`), and
-would need to have a menu assiciated with it. If any of these conditions is not met, the applicatoin will start, but
-there will be no AppIndicator displayed though. Thus, after instantiaing the one, we set it up correctly.
+1. First, we import [Gtk](http://python-gtk-3-tutorial.readthedocs.org/en/latest/#) and 
+   [AppIndicator](http://developer.ubuntu.com/api/devel/ubuntu-13.10/python/AppIndicator3-0.1.html) basic
+   implementation. Thing to note here is that in some older documentation you may find importing `gtk` module - that 
+   would be an older Gtk 2, while we use Gtk+ 3 here.
 
-> A note on AppIndicator constructor: it accepts a *unique* indicator name (so think of a name no one else would use), 
-> an icon name (more on it later, let's put any string here for now) and an indicator category. 
+2. A most simple AppIndicator, in order to be actually displayed, would need to be activated (`set_status(...ACTIVE)`),
+   and would need to have a menu assiciated with it. If any of these conditions is not met, the applicatoin will start,
+   but there will be no AppIndicator displayed though. Thus, after instantiaing the one, we set it up correctly.
 
-> You can `dir()` all categoreis from `appindicator.IndicatorCategory` to see which are available. The category typically
-> impacts where in the system tray the AppIndicator is placed - that is, the ordering between AppIndicators. You may want
-> to experiment wth different categories to see what the result it.
+   > A note on AppIndicator constructor: it accepts a **unique** indicator name (so think of a name no one else would 
+   > use), an icon name (more on it later, let's put any string here for now) and an indicator category. You can `dir()`
+   > all categoreis from `appindicator.IndicatorCategory` to see which are available. The category typically impacts 
+   > where in the system tray the AppIndicator is placed - that is, the ordering between AppIndicators. You may want
+   > to experiment wth different categories to see what the result is.
 
-Lastly, `gtk.main()` starts the Gtk endless loop. This function call will not quit until the Gtk application ends itself.
-Thus, in the case of the code above - it never ends.
+3. Lastly, `gtk.main()` starts the Gtk endless loop. This function call will not quit until the Gtk application ends
+   itself. Thus, in the case of the code above - it never ends.
 
-If you run this code now from Python REPL or create a script and run it - you should now see the AppIndicator in the
-"system tray", with a standard "no icon" icon.
+If you run this code now from Python REPL or, run [this script](https://gist.github.com/candidtim/c943835a9742f5021eeb)
+- you should now see the AppIndicator in the "system tray", with a standard "no icon" icon.
 
-	TODO: image here
+![Minimalist Ubuntu AppIndicator](/assets/myappindicator_v1.png)
 
-This is our basic starting point. Let's improve it now.
+This is our basic starting point. Let's start improving it now.
 
-	TODO: full source code at this point
+> [Full source code at this point](https://gist.github.com/candidtim/c943835a9742f5021eeb)
 
 ## Can't stop?
 
-First thing you will notice - there is no "normal" way to stop the AppIndicator. We didn't add a call to stop the Gtk 
-main loop anywhere, and even `Ctrl+C` doesn't really work. For now, the only thing you can do is to find the prcess id 
-and kill it. Or, simply close the terminal you've started the application in.
+First thing you'll notice - there is no "normal" way to stop the AppIndicator. We didn't add a call to stop the Gtk 
+main loop anywhere, and even `Ctrl+C` doesn't really work. For now, the only thing you can do is to find the id of the 
+process and kill it. Or, simply close the terminal you've started the application in.
 
 First quick win would be to fix "Ctrl+C" behaviour. Add:
 
@@ -84,42 +82,118 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 This will make the AppIndicator reacting normally to the "Ctrl+C" in the terminal - at least it can be stopped now. 
 
-> This line of code [sets the handler](https://docs.python.org/2/library/signal.html#signal.signal) for "INT" signal 
-> processing - the one issued by the OS when "Ctrl+C" is typed - and the handler is the 
-> ["default"](https://docs.python.org/2/library/signal.html#signal.SIG_DFL) one, which, in case of the interrupt signal,
-> is to stop execution.
+> This [sets the handler](https://docs.python.org/2/library/signal.html#signal.signal) for "INT" signal 
+> processing - the one issued by the OS when "Ctrl+C" is typed. The handler we assign to it is the 
+> ["default"](https://docs.python.org/2/library/signal.html#signal.SIG_DFL) handler, which, in case of the interrupt
+> signal, is to stop execution.
 
 However, for the end user we would certianly want to add a more convenient way to stop it - which would typically be a
 dedicated menu item in the indicator's main menu. Let's add it now.
 
-	TODO: full source code at this point
+> [Full source code at this point](https://gist.github.com/candidtim/2cd33ad40016b918ecf9)
 
 ## Add menu items
 
-AppIndicator is built on Gtk, so there is nothing specific in the way you create a menu. Here I will not dive into Gtk
-itself, as there are really good tutorials on it, like 
-[this one](http://python-gtk-3-tutorial.readthedocs.org/en/latest/#), for example. The simple way to create a menu for
-an AppIndicator is below. Let's add two menu items - as decided one is "Quit", and other sample one we'll enrich later.
+AppIndicator is built on Gtk, so there is nothing specific in the way you create a menu. Gtk+ 3 has a 
+[great tutorial](http://python-gtk-3-tutorial.readthedocs.org/en/latest/#). Below is the example of the menu for out 
+AppIndicator. Let's add "Quit" menu item.
 
-Instead of setting an empty menu, as our initial implementation does, let's build it first:
+Add two new functions:
 
-	TODO
+{% highlight python %}
+def build_menu():
+    menu = gtk.Menu()
+    item_quit = gtk.MenuItem('Quit')
+    item_quit.connect('activate', quit)
+    menu.append(item_quit)
+    menu.show_all()
+    return menu
+ 
+def quit(source):
+    gtk.main_quit()
+{% endhighlight %}
+
+And, replace `indicator.set_menu(gtk.Menu())` with `indicator.set_menu(build_menu())`, to assign the new menu to an 
+indicator. Not digging into Gtk details, few notes on this however:
+
+1. Do not forget to call `menu.show_all()`, or the menu will not contain the new items added to it.
+
+2. Action listener assigned to the menu item receives a single argument - an event source, which in this case is the
+   menu item itself. We don't need to use it in this implementation so could have replaced the argumennt name with `_`.
+
+3. Calling `gtk.main_quit()` stops the Gtk main loop, effectively making the previous call to `gtk.main()` to 
+   return, and thus, our `main()` function to return and application to stop.
+
+Now if you run it and click on an indicator icon - there will be "Quit" menu item, which, when clicked should stop
+the indicator applciation. 
+
+But, the indicator itself still looks quite ugly. Let's find a better icon for it now.
+
+> [Full source code at this point](https://gist.github.com/candidtim/4705c55d41ae982ee60e)
 
 ## Custom icon 
 
-...
+There are two options for an indicator icon: use one from the icon library installed with the Gtk, or, use a custom
+one. To use the icon from the Gtk library, simply, give its name to the AppIndicator constructor. For example, follwing
+change:
+
+{% highlight python %}
+indicator = appindicator.Indicator.new(APPINDICATOR_ID, gtk.STOCK_INFO, appindicator.IndicatorCategory.SYSTEM_SERVICES)
+{% endhighlight %}
+
+Will result in:
+
+![Ubuntu AppIndicator with Gtk icon](/assets/myappindicator_v2.png)
+
+> Prebuilt Gtk icons depend on the Gtk distribution, but there are few which normally present in every distribution. You
+> can search the documentation to find the list of all icons, like 
+> [this one](http://www.pygtk.org/pygtk2reference/gtk-stock-items.html) for example.
+
+Although probably little better than "no icon" icon, yet this doesn't look unique. Alternatively, you can use a custom
+image as an icon. I think that the best choice for an icon is the `SVG` image, as it will scale nicely if the UI theme
+requires system tray icons to have size different from the one you've tested on. 
+
+Create your icon, or download one, or use [this sample icon](/assets/sample_icon.svg) I've created for this guide. Save
+it somwhere on disk, and use the path to an icon instead of the icon name when constructing the AppIndicator. Path can
+be absolute or relative, so, if you save an icon into a file `sample_icon.svg` in the same directory as the AppIndicator
+python program, update the call to the constructor as follows:
+
+{% highlight python %}
+indicator = appindicator.Indicator.new(APPINDICATOR_ID, 'sample_icon.svg', appindicator.IndicatorCategory.SYSTEM_SERVICES)
+{% endhighlight %}
+
+Run, and now it should look like this:
+
+![Ubuntu AppIndicator with custom icon](/assets/myappindicator_v3.png)
+
+Nice!
+
+> [Full source code at this point](https://gist.github.com/candidtim/7290a1ad6e465d680b68)
 
 ## Showing baloon notifications
+
+Now, the AppIndicator doesn't do that much yet. Let's add some behavour to it - for example, give us some nerdy Chuck
+Norris joke. 
+
+We would need 3 elements here. First, let's add a funciton to fetch a joke:
+
+{% highlight python %}
+// http://api.icndb.com/jokes/random?limitTo=[nerdy]
+{% endhighlight %}
+
+Now, add a menu item and action listener:
+
+{% highlight python %}
+indicator = appindicator.Indicator.new(APPINDICATOR_ID, gtk.STOCK_INFO, appindicator.IndicatorCategory.SYSTEM_SERVICES)
+{% endhighlight %}
+
+And, finally, show the joke in a baloon notification:
 
 {% highlight python %}
 from gi.repository import Notify as notify
 
 init first
 {% endhighlight %}
-
-## Testing the AppIndicator
-
-	TODO
 
 ## Distributing the AppIndicator - why not Python package?
 
