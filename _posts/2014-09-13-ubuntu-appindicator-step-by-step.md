@@ -166,58 +166,85 @@ Run, and now it should look like this:
 
 ![Ubuntu AppIndicator with custom icon](/assets/myappindicator_v3.png)
 
-Nice!
+Nice! Note that an icon can also be changed while the indicator is running, with `indicator.set_icon()` method.
 
 > [Full source code at this point](https://gist.github.com/candidtim/7290a1ad6e465d680b68)
 
-## Showing baloon notifications
+## Showing baloon (bubble) notifications
 
-Now, the AppIndicator doesn't do that much yet. Let's add some behavour to it - for example, give us some nerdy Chuck
-Norris joke. 
+With all above we have now a ready-to-use base for an AppIndicator. Now, the AppIndicator doesn't do that much yet. 
+As an example, let's add some behavour to it - for example, give us some nerdy Chuck Norris joke from 
+[The Internet Chuck Norris Database](http://www.icndb.com/api/). We would display jokes in a baloon notification 
+typically popping out in upper right corner of the screen in Ubuntu.
 
 We would need 3 elements here. First, let's add a funciton to fetch a joke:
 
 {% highlight python %}
-// http://api.icndb.com/jokes/random?limitTo=[nerdy]
+import json
+from urllib2 import Request, urlopen, URLError
+
+# ...
+
+def fetch_joke():
+    request = Request('http://api.icndb.com/jokes/random?limitTo=[nerdy]')
+    response = urlopen(request)
+    joke = json.loads(response.read())['value']['joke']
+    return joke
 {% endhighlight %}
 
-Now, add a menu item and action listener:
+now, add a menu item and an action listener:
 
 {% highlight python %}
-indicator = appindicator.Indicator.new(APPINDICATOR_ID, gtk.STOCK_INFO, appindicator.IndicatorCategory.SYSTEM_SERVICES)
+def build_menu():
+	# ...
+    item_joke = gtk.MenuItem('Joke')
+    item_joke.connect('activate', joke)
+    menu.append(item_joke)
+    # ...
+
+def joke(_):
+    # ...
 {% endhighlight %}
 
-And, finally, show the joke in a baloon notification:
+and, finally, show the joke in a baloon notification:
 
 {% highlight python %}
 from gi.repository import Notify as notify
 
-init first
+# ...
+
+def main():
+    # ...
+    notify.init(APPINDICATOR_ID)
+    gtk.main()
+
+# ...
+
+def joke(_):
+    notify.Notification.new("<b>Joke</b>", fetch_joke(), None).show()
+
+def quit(_):
+    notify.uninit()
+    gtk.main_quit()
 {% endhighlight %}
 
-## Distributing the AppIndicator - why not Python package?
+Again, few notes:
 
-Certainly the best option to distribute an AppIndicator for Ubuntu would be to create a Debian package for it. I've 
-found however creating the `deb` package quite cumbersome, and, I decided to not to go with this solution - mosty 
-because I would need to set-up a ppa repository and maintain it.
+1. To show notifications we use [notify API](https://notify2.readthedocs.org/en/latest/) which we first import and 
+   initialize with the unique application name - in our case could be the same as the one used for an indicator itself.
 
-As an alternative, as long as the AppIndicator is implemented in Python, it can be distributed in a Python package. Now,
-it could be installed with `pip` directly from source code, like this:
+2. To show a notification we construct a `Notification` instance and `show()` it. There is no 3rd argument in the code 
+   above, which is a path to an icon. If you pass `None` as above, there will simply no icon.
 
-    pip install git+https://example.com/myappindicator.git
+3. Be nice to Gtk and `uninit()` notify API before quitting the application
 
-There is an obvious disadvantage of this approach howeever - no automatic update would be possible when a newer version
-of the AppIndicator is released. I think thus, that building a Debian package would be a better option, but if you're
-still interested in the Python pacakging option, there it is:
+Now, if you run the AppIndicator at this point, clicking on its "Joke" menu should display a fun baloon notification:
 
-	TODO
+![Joking Ubuntu AppIndicator](/assets/myappindicator_v4.png)
 
-## Tips and Tricks - identify main colors of current Ubuntu theme
+That's it! I take no more your attention, and hope this sample AppIndicator could serve a good base for a new indicator implementation ;)
 
-Imagine you'd like your AppIndicator having different icons depending on the UI theme in Ubuntu. For example, in darker
-themese the icon can be lighter, and vice versa. But, how to identify current Ubuntu theme?
-
-There is an API you could normally use to identify active UI theme name, but there is one disadvantage with it - in your
-application you would need to know the names of all themes your users might use, in order to assign the right icon. 
-
-...
+You can find [here the source code of this implementation](https://gist.github.com/candidtim/5663cc76aa329b2ddfb5) and
+use it as you want (consider it as MIT). Or you can also check out the 
+[Vagrant AppIndicator for Ubuntu](https://github.com/candidtim/vagrant-appindicator) as a more real-world example which
+also provides theming support (dark & light UI themes) and a way to distribute an AppIndicator in a Python package.
