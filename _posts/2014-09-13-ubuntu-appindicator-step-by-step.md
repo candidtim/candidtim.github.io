@@ -7,11 +7,11 @@ categories: appindicator
 
 When implementing the [Vagrant AppIndicator for Ubuntu](https://github.com/candidtim/vagrant-appindicator), I really 
 lacked the documentation on this subject. I've found the 
-[official documentaiton](https://unity.ubuntu.com/projects/appindicators/) too sparse and having broken links (there is
+[official documentation](https://unity.ubuntu.com/projects/appindicators/) too sparse and having broken links (there is
 still one broken by the time of this writing) and the only way to proceed was to experiment a lot and dig into
-open-soruce implementations of a couple of other application indicators. So, I've decided to release this guide, 
+open-source implementations of a couple of other application indicators. So, I've decided to release this guide, 
 hopefully comprehensive enough and useful. Here I show, step-by-step, how the AppIndicator could be implemented in 
-Python. I try to keep it short and concrete, yet understandible.
+Python. I try to keep it short and concrete, yet understandable.
 
 ## Minimal set-up - the very basic indicator
 
@@ -41,14 +41,14 @@ Few notes on it:
    would be an older Gtk 2, while we use Gtk+ 3 here.
 
 2. A most simple AppIndicator, in order to be actually displayed, would need to be activated (`set_status(...ACTIVE)`),
-   and would need to have a menu assiciated with it. If any of these conditions is not met, the applicatoin will start,
-   but there will be no AppIndicator displayed though. Thus, after instantiaing the one, we set it up correctly.
+   and would need to have a menu associated with it. If any of these conditions is not met, the application will start,
+   but there will be no AppIndicator displayed though. Thus, after instantiating the one, we set it up correctly.
 
    > A note on AppIndicator constructor: it accepts a **unique** indicator name (so think of a name no one else would 
    > use), an icon name (more on it later, let's put any string here for now) and an indicator category. You can `dir()`
-   > all categoreis from `appindicator.IndicatorCategory` to see which are available. The category typically impacts 
+   > all categories from `appindicator.IndicatorCategory` to see which are available. The category typically impacts 
    > where in the system tray the AppIndicator is placed - that is, the ordering between AppIndicators. You may want
-   > to experiment wth different categories to see what the result is.
+   > to experiment with different categories to see what the result is.
 
 3. Lastly, `gtk.main()` starts the Gtk endless loop. This function call will not quit until the Gtk application ends
    itself. Thus, in the case of the code above - it never ends.
@@ -68,7 +68,7 @@ First thing you'll notice - there is no "normal" way to stop the AppIndicator. W
 main loop anywhere, and even `Ctrl+C` doesn't really work. For now, the only thing you can do is to find the id of the 
 process and kill it. Or, simply close the terminal you've started the application in.
 
-First quick win would be to fix "Ctrl+C" behaviour. Add:
+First quick win would be to fix "Ctrl+C" behavior. Add:
 
 {% highlight python %}
 import signal
@@ -87,7 +87,7 @@ This will make the AppIndicator reacting normally to the "Ctrl+C" in the termina
 > ["default"](https://docs.python.org/2/library/signal.html#signal.SIG_DFL) handler, which, in case of the interrupt
 > signal, is to stop execution.
 
-However, for the end user we would certianly want to add a more convenient way to stop it - which would typically be a
+However, for the end user we would certainly want to add a more convenient way to stop it - which would typically be a
 dedicated menu item in the indicator's main menu. Let's add it now.
 
 > [Full source code at this point](https://gist.github.com/candidtim/2cd33ad40016b918ecf9)
@@ -119,13 +119,13 @@ indicator. Not digging into Gtk details, few notes on this however:
 1. Do not forget to call `menu.show_all()`, or the menu will not contain the new items added to it.
 
 2. Action listener assigned to the menu item receives a single argument - an event source, which in this case is the
-   menu item itself. We don't need to use it in this implementation so could have replaced the argumennt name with `_`.
+   menu item itself. We don't need to use it in this implementation so could have replaced the argument name with `_`.
 
 3. Calling `gtk.main_quit()` stops the Gtk main loop, effectively making the previous call to `gtk.main()` to 
    return, and thus, our `main()` function to return and application to stop.
 
 Now if you run it and click on an indicator icon - there will be "Quit" menu item, which, when clicked should stop
-the indicator applciation. 
+the indicator application. 
 
 But, the indicator itself still looks quite ugly. Let's find a better icon for it now.
 
@@ -134,7 +134,7 @@ But, the indicator itself still looks quite ugly. Let's find a better icon for i
 ## Custom icon 
 
 There are two options for an indicator icon: use one from the icon library installed with the Gtk, or, use a custom
-one. To use the icon from the Gtk library, simply, give its name to the AppIndicator constructor. For example, follwing
+one. To use the icon from the Gtk library, simply, give its name to the AppIndicator constructor. For example, following
 change:
 
 {% highlight python %}
@@ -154,7 +154,7 @@ image as an icon. I think that the best choice for an icon is the `SVG` image, a
 requires system tray icons to have size different from the one you've tested on. 
 
 Create your icon, or download one, or use [this sample icon](/assets/sample_icon.svg) I've created for this guide. Save
-it somwhere on disk, and use the path to an icon instead of the icon name when constructing the AppIndicator. Path can
+it somewhere on disk, and use the path to an icon instead of the icon name when constructing the AppIndicator. Path can
 be absolute or relative, so, if you save an icon into a file `sample_icon.svg` in the same directory as the AppIndicator
 python program, update the call to the constructor as follows:
 
@@ -170,14 +170,14 @@ Nice! Note that an icon can also be changed while the indicator is running, with
 
 > [Full source code at this point](https://gist.github.com/candidtim/7290a1ad6e465d680b68)
 
-## Showing baloon (bubble) notifications
+## Showing balloon (bubble) notifications
 
 With all above we have now a ready-to-use base for an AppIndicator. Now, the AppIndicator doesn't do that much yet. 
-As an example, let's add some behavour to it - for example, give us some nerdy Chuck Norris joke from 
-[The Internet Chuck Norris Database](http://www.icndb.com/api/). We would display jokes in a baloon notification 
+As an example, let's add some behavior to it - for example, give us some nerdy Chuck Norris joke from 
+[The Internet Chuck Norris Database](http://www.icndb.com/api/). We would display jokes in a balloon notification 
 typically popping out in upper right corner of the screen in Ubuntu.
 
-We would need 3 elements here. First, let's add a funciton to fetch a joke:
+We would need 3 elements here. First, let's add a function to fetch a joke:
 
 {% highlight python %}
 import json
@@ -206,7 +206,7 @@ def joke(_):
     # ...
 {% endhighlight %}
 
-and, finally, show the joke in a baloon notification:
+and, finally, show the joke in a balloon notification:
 
 {% highlight python %}
 from gi.repository import Notify as notify
@@ -238,7 +238,7 @@ Again, few notes:
 
 3. Be nice to Gtk and `uninit()` notify API before quitting the application
 
-Now, if you run the AppIndicator at this point, clicking on its "Joke" menu should display a fun baloon notification:
+Now, if you run the AppIndicator at this point, clicking on its "Joke" menu should display a fun balloon notification:
 
 ![Joking Ubuntu AppIndicator](/assets/myappindicator_v4.png)
 
