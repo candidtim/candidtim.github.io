@@ -154,12 +154,15 @@ image as an icon. I think that the best choice for an icon is the `SVG` image, a
 requires system tray icons to have size different from the one you've tested on. 
 
 Create your icon, or download one, or use [this sample icon](/assets/sample_icon.svg) I've created for this guide. Save
-it somewhere on disk, and use the path to an icon instead of the icon name when constructing the AppIndicator. Path can
-be absolute or relative, so, if you save an icon into a file `sample_icon.svg` in the same directory as the AppIndicator
+it somewhere on disk, and use the path to an icon instead of the icon name when constructing the AppIndicator. Path should be absolute, so, if you save an icon into a file `sample_icon.svg` in the same directory as the AppIndicator
 python program, update the call to the constructor as follows:
 
 {% highlight python %}
-indicator = appindicator.Indicator.new(APPINDICATOR_ID, 'sample_icon.svg', appindicator.IndicatorCategory.SYSTEM_SERVICES)
+import os
+
+# ...
+
+indicator = appindicator.Indicator.new(APPINDICATOR_ID, os.path.abspath('sample_icon.svg'), appindicator.IndicatorCategory.SYSTEM_SERVICES)
 {% endhighlight %}
 
 Run, and now it should look like this:
