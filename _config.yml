@@ -13,3 +13,4 @@ github_username:  candidtim
 
 # Build settings
 markdown: kramdown
+highlighter: rouge
