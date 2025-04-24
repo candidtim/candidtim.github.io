@@ -3,8 +3,12 @@ layout: post
 title:  "Writing Vim plugin in Python"
 date:   2017-08-11
 categories: vim
-hidden: 1
 ---
+
+> A draft of this post was originally published by accident. It apparently
+> attracted some interest and, although the post was never complete, all code
+> was working by the time it was published. As such this post is kept published
+> as-is, in the hope that it still serves its purpose.
 
 Writing a Vim script for own use is easy. Writing a plugin, compatible with pathogen, Vundle or other, and making
 it top quality user experience is just a bit more complicated. But is still easy and fun. Here I show just how
@@ -13,10 +17,6 @@ to do so.
 Only prerequisites are: Vim, some Python knowledge and lots of curiosity (more on that later). Some sample commands here
 are for `bash`, so, Linux or Mac. You will need to adjust a bit if you use Windows, but the general idea and all the
 rest is same in any case.
-
-Final source code is available on ... TODO: share source code
-
-TODO: links to Vim wiki, documentation, etc. Links to other blogs.
 
 Let's go!
 
@@ -184,7 +184,7 @@ Restart test Vim instance, see the new message, all done!
 Now, you likely want to add some commands to the Plugin, or it risks to not to be very useful. Let's implement a
 simple command which would print out the country you are in, based on your IP. I mean, why not?
 
-Let's implement it first:   TODO: fix for Python 2
+Let's implement it first:
 
 {% highlight python %}
 import urllib, urllib.request
@@ -352,26 +352,10 @@ Now, for example, if our user does something like `:source ~/.vimrc`, we are sur
 the initialization code again: won't change `sys.path` again, won't import python modules or execute mode-level code.
 Having said that, you don't have any code at module level except for declarations, do you?
 
-## Provide documentation
-
-TODO: how to document?
-
-
-## Publish a plugin
-
-TODO: publish to GitHub
-
-
-## TODO: ?
-
- - testing with vim and not (split code, unittest without vim module)
- - not relaunching vim? (re-source ~/.vimrc ?)
-
 
 ## That's it!
 
-You can find final source code in this sample repository. TODO: add link. Certainly check out `:help python` which
-contanins a lot of important details.
+Check out `:help python` which contanins a lot of important details.
 
 If you know of other important tricks, or have a good advice - please, leave a comment below. I'm very interested in
 further improvments of my Vim plugin development workflow and implementation.
