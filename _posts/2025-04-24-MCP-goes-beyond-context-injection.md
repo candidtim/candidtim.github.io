@@ -2,7 +2,10 @@
 layout: post
 title:  "MCP goes beyond context injection"
 date:   2025-04-24
-categories: mcp
+categories: mcp ai llm
+description: >
+  Is MCP just a content provider with a fancy name? I argue it's much more - it
+  is at the core of AI-Agent architecture.
 ---
 
 [Model Context Protocol](https://modelcontextprotocol.io/introduction) attracts

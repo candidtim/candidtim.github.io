@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Writing Vim plugin in Python"
+title:  "Writing a Vim plugin in Python"
 date:   2017-08-11
 categories: vim
 ---
