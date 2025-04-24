@@ -55,8 +55,8 @@ beyond piping more context to chat interfaces. **MCP is what enables the AI
 Agent architecture**.
 
 Personally, I have found that writing an MCP server is the most intuitive way
-to learn more about it. Creating new client applications on the hand is about
-inventing new use cases and new services, which is naturally harder, but
+to learn more about it. Creating new client applications on the other hand is
+about inventing new use cases and new services, which is naturally harder, but
 arguably more exciting. I am keen to see more of these in the future!
 
 --
