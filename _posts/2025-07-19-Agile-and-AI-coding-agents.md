@@ -70,3 +70,10 @@ software engineers.
 Yet, it is interesting to note that these specific practices are the ones that
 stand out and, crucially, **make life easier for both software engineers and
 AI**.
+
+--
+
+
+Happy coding!
+
+👉 [Discussion on LinkedIn](https://www.linkedin.com/feed/update/urn:li:share:7352294339332427776/)
