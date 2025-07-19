@@ -14,7 +14,8 @@ description: >
 
 Clean code, [XP](https://en.wikipedia.org/wiki/Extreme_programming), and some
 Agile practices have curiously made a big comeback now that we use AI coding
-agents like Claude Code, Augment, or Cursor.
+agents like [Claude Code](https://www.anthropic.com/claude-code),
+[Augment](https://www.augmentcode.com/), or [Cursor](https://cursor.com/).
 
 "Come back" might be a strong word here - after all, hopefully, most teams have
 been following these practices all along. Nevertheless, it's now clear that the
