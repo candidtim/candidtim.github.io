@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "I am glad AI is here, we are doing new things again"
-date:   2025-04-24
+date:   2026-05-28
 categories: ai
 description: >
   LLMs finally made tech feel new and exciting again, like the early days of
