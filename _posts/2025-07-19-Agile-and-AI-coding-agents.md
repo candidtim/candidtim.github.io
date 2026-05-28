@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "AI Coding Agents confirm that Agile and XP still stand"
-date:   2025-04-24
+date:   2025-07-19
 categories: ai
 description: >
   We now write code with AI and rely more than ever on clean code, unit testing,
