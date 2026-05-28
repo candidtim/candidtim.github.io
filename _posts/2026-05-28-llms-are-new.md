@@ -15,8 +15,8 @@ might say "duh...", but hear me out:
 Honestly, the last couple of years before LLMs felt stagnant, with many
 motivated and talented people searching for challenges or problems to solve,
 not the other way around. It was frankly weird. Migrating code bases from Go to
-Rust, and implementing better TUIs for curl are cool side projects, but one has
-to question the ROI at some point.
+Rust, and implementing better TUIs for curl are cool side projects, and I have
+my share of those too, but one has to question the ROI at some point.
 
 In reality, many problems have already been solved, from good tooling to
 programming languages, frameworks, development methodologies, and so on, all
