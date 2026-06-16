@@ -1,7 +1,3 @@
-candidtim.github.io
-===================
+# candidtim.github.io
 
-To run locally:
-
-    $ gem install jekyll
-    $ jekyll serve
+Run `jekyll serve -H 0.0.0.0` in dev container.
