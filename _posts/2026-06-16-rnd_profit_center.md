@@ -6,18 +6,13 @@ categories: ai
 description: >
   It took an AI revolution to firmly establish R&D as a profit center. Not
   because AI changed the economics of software development, but because it
-  compressed the feedback loops enough to make the financial impact of
-  engineering work visible. Here is the argument, from P&L impact to
-  LTV:CAC ratios.
+  makes the financial impact of engineering work more visible. Here is the
+  argument, from P&L impact to LTV:CAC ratios.
 ---
 
 Traditionally, before SaaS became a thing, IT departments in non-software
 companies were largely considered cost centers. Unless you were a software
 consulting company, developers' salaries were an operating expense in the P&L.
-Navigating tough times financially? Need to cut costs? "What does this
-department do anyway?" Operating expenses are the first thing you look at. And
-by the way, this also explains the old-school cultural divide between software
-engineering and other departments.
 
 Later, the SaaS model changed this for good. If your product is a software, the
 department that builds it cannot be an operational cost anymore (not entirely
@@ -25,9 +20,9 @@ anyway). Even the language we use changed. Our products create *value*. We
 *invest* in new initiatives. In most cases R&D salaries are capitalized and
 become an asset rather than an expense line in the P&L. R&D initiatives are now
 evaluated by their ROI. Even bug fixes impact client retention and hence the
-long-term client value. All in all, R&D departments shifted to the profit
-center mentality. Same rough times financially? Now the question is how do we
-invest *better* into R&D to get more returns faster.
+long-term client value. All in all, R&D departments shifted closer to the
+profit center mentality. Even in rough times the question is now how to invest
+*better* into R&D to get more returns faster.
 
 Sometimes, the link between R&D work and the financial outcomes is still fuzzy,
 though. Agile helps, but the length of the product development cycles, followed
@@ -42,8 +37,9 @@ the underlying economics of a software company changed, but reduced cycle
 length alone is a game changer. Rapid prototyping tools bring businesses closer
 to software development. Time to market is reduced, meaning that a startup, for
 example, can try more ideas to find its product-market fit. Even if not all
-projects are accelerated by AI, those projects that ship sooner create a clearer
-understanding of their financial impact.
+projects are accelerated by AI, those projects that ship sooner create a
+clearer understanding of their financial impact, greatly helping the CTOs'
+communication.
 
 As a result, R&D is even more than before talked about as an *investment*. Part
 of it is of course the general excitement about the AI itself, but even
